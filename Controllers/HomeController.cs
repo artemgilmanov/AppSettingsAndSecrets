@@ -18,9 +18,25 @@ namespace AppSettingsAndSecrets.Controllers
     public IActionResult Index()
     {
       ViewBag.SendGridKey = _configuration.GetValue<string>("SendGrid");
-      ViewBag.TwilioAuthToken = _configuration.GetValue<string>("Twilio:AuthToken");
+      ViewBag.TwilioAuthToken = _configuration.GetSection("Twilio").GetValue<string>("AuthToken");
       ViewBag.TwilioAccountSid = _configuration.GetValue<string>("Twilio:AccountSid");
+      
+      ViewBag.ThreeLevelSettings = _configuration.GetValue<string>("FirstLevelSettings:SecondLevelSettings:BottomLevelSettings");
+
+      // Option 2
+      //ViewBag.ThreeLevelSettings = _configuration
+      //  .GetSection("FirstLevelSettings")
+      //  .GetSection("SecondLevelSettings")
+      //  .GetValue<string>("BottomLevelSettings");
+
+      // Option 3
+      //ViewBag.ThreeLevelSettings = _configuration
+      //  .GetSection("FirstLevelSettings")
+      //  .GetSection("SecondLevelSettings")
+      //  .GetSection("BottomLevelSettings").Value;
+
       return View();
+
     }
 
     public IActionResult Privacy()
