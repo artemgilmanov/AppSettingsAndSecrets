@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using AppSettingsAndSecrets.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace AppSettingsAndSecrets.Controllers
 {
@@ -8,35 +9,39 @@ namespace AppSettingsAndSecrets.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IOptions<TwilioSettings> _twilioOptions;
+        private readonly TwilioSettings _twilioSettings;
 
-    public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+    public HomeController(
+      ILogger<HomeController> logger,
+      IConfiguration configuration,
+      IOptions<TwilioSettings> twilioOptions,
+      TwilioSettings twilioSettings)
     {
       _logger = logger;
       _configuration = configuration;
+      _twilioOptions = twilioOptions;
+      _twilioSettings = twilioSettings;
     }
 
     public IActionResult Index()
     {
       ViewBag.SendGridKey = _configuration.GetValue<string>("SendGrid");
-      ViewBag.TwilioAuthToken = _configuration.GetSection("Twilio").GetValue<string>("AuthToken");
-      ViewBag.TwilioAccountSid = _configuration.GetValue<string>("Twilio:AccountSid");
-      
+
+      // IOptions
+      //ViewBag.TwilioAuthToken = _twilioOptions.Value.AuthToken;
+      //ViewBag.TwilioAccountSid = _twilioOptions.Value.AccountSid;
+      //ViewBag.TwilioPhoneNumber = _twilioOptions.Value.PhoneNumber;
+
+      // Binding in Startup
+      ViewBag.TwilioAuthToken = _twilioSettings.AuthToken;
+      ViewBag.TwilioAccountSid = _twilioSettings.AccountSid;
+      ViewBag.TwilioPhoneNumber = _twilioSettings.PhoneNumber;
+
+
       ViewBag.ThreeLevelSettings = _configuration.GetValue<string>("FirstLevelSettings:SecondLevelSettings:BottomLevelSettings");
 
-      // Option 2
-      //ViewBag.ThreeLevelSettings = _configuration
-      //  .GetSection("FirstLevelSettings")
-      //  .GetSection("SecondLevelSettings")
-      //  .GetValue<string>("BottomLevelSettings");
-
-      // Option 3
-      //ViewBag.ThreeLevelSettings = _configuration
-      //  .GetSection("FirstLevelSettings")
-      //  .GetSection("SecondLevelSettings")
-      //  .GetSection("BottomLevelSettings").Value;
-
       return View();
-
     }
 
     public IActionResult Privacy()

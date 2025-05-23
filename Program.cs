@@ -1,6 +1,9 @@
+using AppSettingsAndSecrets.Models;
+using AppSettingsAndSecrets.Services;
+
 namespace AppSettingsAndSecrets
 {
-    public class Program
+  public class Program
     {
         public static void Main(string[] args)
         {
@@ -9,6 +12,9 @@ namespace AppSettingsAndSecrets
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+
+            builder.Services.AddConfiguration<TwilioSettings>(builder.Configuration, "Twilio");
+            builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
 
             var app = builder.Build();
 
