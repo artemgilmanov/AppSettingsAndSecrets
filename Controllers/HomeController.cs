@@ -48,6 +48,8 @@ namespace AppSettingsAndSecrets.Controllers
       ViewBag.FacebookKey = _socialLoginSettings.FacebookSettings.Key;
       ViewBag.GoogleKey = _socialLoginSettings.GoogleSettings.Key;
 
+      ViewBag.ConnectionString = _configuration.GetConnectionString("DefaultConnecton");
+
 
       return View();
     }
