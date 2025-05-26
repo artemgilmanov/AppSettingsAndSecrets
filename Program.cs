@@ -4,40 +4,45 @@ using AppSettingsAndSecrets.Services;
 namespace AppSettingsAndSecrets
 {
   public class Program
+  {
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+      var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
+      // Add services to the container.
+      builder.Services.AddControllersWithViews();
 
 
-            builder.Services.AddConfiguration<TwilioSettings>(builder.Configuration, "Twilio");
-            builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+      builder.Services.AddConfiguration<TwilioSettings>(builder.Configuration, "Twilio");
 
-            var app = builder.Build();
+      builder.Services.AddConfiguration<SocialLoginSettings>(builder.Configuration, "SocialLoginSettings");
+      // Configuration to use DI in View
+      builder.Services.Configure<SocialLoginSettings>(builder.Configuration.GetSection("SocialLoginSettings"));
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+      builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+      var app = builder.Build();
 
-            app.UseRouting();
+      // Configure the HTTP request pipeline.
+      if (!app.Environment.IsDevelopment())
+      {
+          app.UseExceptionHandler("/Home/Error");
+          // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+          app.UseHsts();
+      }
 
-            app.UseAuthorization();
+      app.UseHttpsRedirection();
+      app.UseStaticFiles();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+      app.UseRouting();
 
-            app.Run();
-        }
+      app.UseAuthorization();
+
+      app.MapControllerRoute(
+          name: "default",
+          pattern: "{controller=Home}/{action=Index}/{id?}");
+
+      app.Run();
     }
+  }
 }
