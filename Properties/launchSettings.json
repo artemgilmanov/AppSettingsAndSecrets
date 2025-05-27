@@ -22,7 +22,9 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SendGrid": "SendGrid from Environment Variables",
+        "Twilio__PhoneNumber": "+1234567890 from Environment Variables"
       }
     },
     "Container (Dockerfile)": {
