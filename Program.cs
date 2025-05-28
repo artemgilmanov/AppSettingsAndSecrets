@@ -24,12 +24,15 @@ namespace AppSettingsAndSecrets
       // Configuration
       builder.Configuration.Sources.Clear();
       builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+      //builder.Configuration.AddJsonFile("customSettings.json", optional: true, reloadOnChange: true);
       builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
       if (builder.Environment.IsDevelopment())
       {
         builder.Configuration.AddUserSecrets<Program>();
       }
       builder.Configuration.AddEnvironmentVariables();
+      builder.Configuration.AddJsonFile("customSettings.json", optional: true, reloadOnChange: true);
       builder.Configuration.AddCommandLine(args);
 
       var app = builder.Build();
